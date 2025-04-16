@@ -1,15 +1,11 @@
 {
-  "name": "python-scraper",
+  "name": "puppet-scraper",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "scrape.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node scrape.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "puppeteer": "^24.6.1"
+    "puppeteer": "^21.0.0"
   }
 }

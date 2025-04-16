@@ -1,29 +1,36 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-(async () => {
-  const url = process.env.SCRAPE_URL;
+// Get the URL from the environment variable or default to Amazon
+const scrapeUrl = process.env.SCRAPE_URL || 'https://aws.amazon.com';
 
-  if (!url) {
-    console.error('Error: SCRAPE_URL environment variable not set.');
-    process.exit(1);
-  }
+async function scrapeData(url) {
+    let browser;
+    try {
+        browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: 'load', timeout: 0 });
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
+        const data = await page.evaluate(() => {
+            const title = document.querySelector('title') ? document.querySelector('title').innerText : 'No title found';
+            const heading = document.querySelector('h1') ? document.querySelector('h1').innerText : 'No heading found';
+            return { title, heading };
+        });
 
-  const page = await browser.newPage();
-  await page.goto(url, { waitUntil: 'domcontentloaded' });
+        // Clean up special characters or unnecessary formatting
+        const cleanedData = {
+            title: data.title.replace(/\u2013/g, '-'), // Replace en dash with regular dash
+            heading: data.heading.replace(/\u2013/g, '-')
+        };
 
-  const data = await page.evaluate(() => {
-    return {
-      title: document.title,
-      heading: document.querySelector('h1')?.innerText || 'No <h1> found'
-    };
-  });
+        // Save cleaned data to a JSON file with indentation
+        fs.writeFileSync('scraped_data.json', JSON.stringify(cleanedData, null, 2));
+        console.log('Scraping successful. Data saved to scraped_data.json.');
+    } catch (error) {
+        console.error('Error during scraping:', error);
+    } finally {
+        if (browser) await browser.close();
+    }
+}
 
-  fs.writeFileSync('scraped_data.json', JSON.stringify(data, null, 2));
-  await browser.close();
-})();
+scrapeData(scrapeUrl);
