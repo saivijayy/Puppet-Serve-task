@@ -32,7 +32,7 @@
 ### 1. **Build the Docker Image**
 
 ```bash
-docker build --build-arg SCRAPE_URL=https://quotes.toscrape.com -t puppet-serve .
+docker build --build-arg SCRAPE_URL=https://aws.amazon.com -t puppet-serve .
 ```
 
 ### 2. **Run the Docker Container**
@@ -55,8 +55,8 @@ You’ll see something like:
 
 ```json
 {
-  "heading": "Quotes to Scrape",
-  "title": "Quotes to Scrape"
+  "heading": "Cloud Computing Services - Amazon Web Services (AWS)",
+  "title": "Cloud Computing Services - Amazon Web Services (AWS)"
 }
 ```
 
