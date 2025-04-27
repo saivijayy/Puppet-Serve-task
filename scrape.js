@@ -19,7 +19,7 @@ async function scrapeData(url) {
 
         // Clean up special characters or unnecessary formatting
         const cleanedData = {
-            title: data.title.replace(/\u2013/g, '-'), // Replace en dash with regular dash
+            title: data.title.replace(/\u2013/g, '-'), 
             heading: data.heading.replace(/\u2013/g, '-')
         };
 
