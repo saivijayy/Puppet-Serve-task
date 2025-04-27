@@ -5,7 +5,6 @@ import signal
 
 app = Flask(__name__)
 
-# Ensure this file exists in the container
 with open('scraped_data.json', 'r') as f:
     data = json.load(f)
 
